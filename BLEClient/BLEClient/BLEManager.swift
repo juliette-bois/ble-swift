@@ -48,7 +48,17 @@ class BLEManager: NSObject {
         centralManager?.stopScan()
     }
     
+//    func listenForMessages(callback:@escaping(Data?)->()) {
+//        messageReceivedCallback = callback
+//    }
+    
     func listenForMessages(callback:@escaping(Data?)->()) {
+        let readCBUUID = CBUUID(string: "499D456C-8691-4D00-87E2-8A34FB7551A3")
+        for periph in readyPeripherals {
+            if let char = BLEManager.instance.getCharForUUID(readCBUUID, forperipheral: periph) {
+                periph.readValue(for: char)
+            }
+        }
         messageReceivedCallback = callback
     }
     

@@ -8,7 +8,7 @@
 import UIKit
 import CoreBluetooth
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var readField: UITextField!
     @IBOutlet weak var writeField: UITextField!
@@ -17,9 +17,12 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
 
+        readField.delegate = self
+        writeField.delegate = self
+        
+        hideKeyboardWhenTappedAround()
+    }
 
     @IBAction func scanClicked(_ sender: Any) {
         print("scan")
@@ -57,6 +60,21 @@ class ViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
 
